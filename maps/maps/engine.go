@@ -1,7 +1,7 @@
 package maps
 
-type MapSource map[string]interface{}
+type Engine map[string]interface{}
 
-func (that MapSource) Fetch() (map[string]interface{}, error) {
+func (that Engine) Fetch() (map[string]interface{}, error) {
 	return that, nil
 }
