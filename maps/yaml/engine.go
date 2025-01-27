@@ -5,6 +5,10 @@ import (
 	"gopkg.in/yaml.v3"
 )
 
+type Writer interface {
+	Save([]byte) error
+}
+
 type Fetcher interface {
 	Fetch() ([]byte, error)
 }
@@ -34,4 +38,18 @@ func (that *Engine) Fetch() (map[string]interface{}, error) {
 	}
 
 	return data, nil
+}
+
+func (that *Engine) Save(data map[string]interface{}) error {
+	if writer, ok := that.fetcher.(Writer); ok {
+		buf := bytes.NewBuffer(nil)
+		encoder := yaml.NewEncoder(buf)
+		err := encoder.Encode(data)
+		if err != nil {
+			return err
+		}
+		return writer.Save(buf.Bytes())
+	}
+
+	return nil
 }

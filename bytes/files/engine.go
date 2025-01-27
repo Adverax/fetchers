@@ -22,3 +22,7 @@ func (that *Fetcher) Fetch() ([]byte, error) {
 
 	return io.ReadAll(file)
 }
+
+func (that *Fetcher) Save(data []byte) error {
+	return os.WriteFile(that.filename, data, 0644)
+}

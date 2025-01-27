@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 )
 
+type Writer interface {
+	Save(data []byte) error
+}
+
 type Fetcher interface {
 	Fetch() ([]byte, error)
 }
@@ -34,4 +38,16 @@ func (that *Engine) Fetch() (map[string]interface{}, error) {
 	}
 
 	return data, nil
+}
+
+func (that *Engine) Save(data map[string]interface{}) error {
+	if writer, ok := that.fetcher.(Writer); ok {
+		bytes, err := json.Marshal(data)
+		if err != nil {
+			return err
+		}
+		return writer.Save(bytes)
+	}
+
+	return nil
 }
