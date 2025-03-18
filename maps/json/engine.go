@@ -31,6 +31,10 @@ func (that *Engine) Fetch() (map[string]interface{}, error) {
 		return nil, err
 	}
 
+	if len(source) == 0 {
+		return data, nil
+	}
+
 	decoder := json.NewDecoder(bytes.NewBuffer(source))
 	err = decoder.Decode(&data)
 	if err != nil {
